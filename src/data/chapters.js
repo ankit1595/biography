@@ -87,7 +87,7 @@ This fusion of philosophical depth, fearlessness, and authenticity - realised on
       },
       {
         type: "text",
-        bgColor: BACKGROUNDS.dustyRose,
+        bgColor: BACKGROUNDS.lightGray,
         isLongForm: false,
         content: `The early years were marked by an unusual sensitivity to the world's contradictions. While other children played, questions about existence, suffering, and truth occupied a young mind.
 
@@ -105,13 +105,13 @@ The education system felt inadequate. Not because it was difficult, but because 
     sections: [
       {
         type: "header",
-        bgColor: BACKGROUNDS.warmDark,
+        bgColor: BACKGROUNDS.dustyRose,
         title: "Prestige and Protest (1995-2006)",
         subtitle: "The corporate world offered success, but demanded the soul.",
       },
       {
         type: "text",
-        bgColor: BACKGROUNDS.warmDark,
+        bgColor: BACKGROUNDS.lightGray,
         isLongForm: false,
         content: `IIT and IIM opened doors to a world of prestige and possibility. The corporate ladder beckoned, promising the conventional markers of success: money, status, security.
 
@@ -143,7 +143,7 @@ The years in the corporate world were not wasted. They revealed the machinery of
     sections: [
       {
         type: "header",
-        bgColor: BACKGROUNDS.black,
+        bgColor: BACKGROUNDS.dustyRose,
         title: "The Free Man in March",
         subtitle: "Breaking free from the golden cage.",
       },
@@ -159,7 +159,7 @@ The years in the corporate world were not wasted. They revealed the machinery of
       },
       {
         type: "text",
-        bgColor: BACKGROUNDS.black,
+        bgColor: BACKGROUNDS.lightGray,
         content:
           "Some decisions cannot be explained, only lived. The resignation letter was not an ending—it was a beginning.",
       },
@@ -173,7 +173,7 @@ The years in the corporate world were not wasted. They revealed the machinery of
     sections: [
       {
         type: "header",
-        bgColor: BACKGROUNDS.lightGray,
+        bgColor: BACKGROUNDS.dustyRose,
         title: "Lighting Lamps in the Wilderness",
         subtitle: "When teaching becomes a calling, not a profession.",
       },
