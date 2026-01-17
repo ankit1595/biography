@@ -1,6 +1,7 @@
-import { chapters } from "../data/chapters";
+import { chapters, BACKGROUNDS } from "../data/chapters";
+import { SectionWrapper } from "./Sections";
 
-export function IndexSection() {
+export function IndexSection({ bgColor = BACKGROUNDS.dustyRose }) {
   const handleNavigate = (e, sectionId) => {
     e.preventDefault();
     const element = document.getElementById(sectionId);
@@ -10,31 +11,34 @@ export function IndexSection() {
   };
 
   const contentChapters = chapters.filter(
-    (ch) => ch.id !== "mission" && ch.id !== "index" && ch.id !== "ending"
+    (ch) =>
+      ch.id !== "mission" &&
+      ch.id !== "index" &&
+      ch.id !== "ending" &&
+      ch.id !== "the-mission"
   );
 
   return (
-    <section className="h-screen flex items-center justify-center px-8">
-      <div className="max-w-[400px] w-full">
-        <h2 className="text-2xl font-bold mb-8 text-center">Chapters</h2>
+    <SectionWrapper
+      bgColor={bgColor}
+      className="h-screen flex items-center px-8 md:px-20"
+    >
+      <div className="max-w-xl">
+        <h2 className="text-2xl italic mb-8">Index</h2>
 
         <nav className="space-y-4">
           {contentChapters.map((chapter, idx) => (
-            <div key={chapter.id} className="flex items-baseline gap-4">
-              <span className="text-xs opacity-40 font-mono">
-                {String(idx + 1).padStart(2, "0")}
-              </span>
-              <a
-                href={`#${chapter.id}`}
-                onClick={(e) => handleNavigate(e, chapter.id)}
-                className="text-xl text-inherit no-underline transition-opacity duration-200 hover:opacity-70"
-              >
-                {chapter.name}
-              </a>
-            </div>
+            <a
+              key={chapter.id}
+              href={`#${chapter.id}`}
+              onClick={(e) => handleNavigate(e, chapter.id)}
+              className="block text-lg hover:opacity-70 transition-opacity"
+            >
+              {idx + 1}. {chapter.name}
+            </a>
           ))}
         </nav>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }

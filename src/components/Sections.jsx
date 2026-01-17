@@ -1,45 +1,122 @@
-export function TextSection({ content, isLongForm = false }) {
+import { BACKGROUNDS } from "../data/chapters";
+
+const SECTION_DEFAULTS = {
+  header: BACKGROUNDS.dustyRose,
+  text: BACKGROUNDS.lightGray,
+  gallery: BACKGROUNDS.black,
+  index: BACKGROUNDS.dustyRose,
+};
+
+const isDarkBackground = (color) => {
+  if (color === BACKGROUNDS.lightGray) return false;
+  return true;
+};
+
+export function SectionWrapper({
+  bgColor = BACKGROUNDS.lightGray,
+  className = "",
+  children,
+}) {
+  const textColor = isDarkBackground(bgColor) ? "#f5f5f4" : "#1c1917";
+  return (
+    <section
+      className={className}
+      style={{ backgroundColor: bgColor, color: textColor }}
+    >
+      {children}
+    </section>
+  );
+}
+
+export function ChapterHeader({
+  title,
+  subtitle,
+  bgColor = SECTION_DEFAULTS.header,
+}) {
+  return (
+    <SectionWrapper
+      bgColor={bgColor}
+      className="h-screen flex items-center justify-center px-8"
+    >
+      <div className="max-w-3xl text-center">
+        <h1 className="text-3xl md:text-4xl font-bold mb-6">{title}</h1>
+        {subtitle && (
+          <p className="text-lg md:text-xl italic opacity-80">{subtitle}</p>
+        )}
+      </div>
+    </SectionWrapper>
+  );
+}
+
+export function TextSection({
+  content,
+  isLongForm = false,
+  bgColor = SECTION_DEFAULTS.text,
+}) {
   if (isLongForm) {
     return (
       <>
-        <section className="py-20 px-8">
+        <SectionWrapper bgColor={bgColor} className="py-20 px-8">
           <div className="max-w-2xl mx-auto">
             <p className="text-lg md:text-xl leading-relaxed whitespace-pre-line">
               {content}
             </p>
           </div>
-        </section>
+        </SectionWrapper>
         <div className="h-px snap-end snap-always"></div>
       </>
     );
   }
 
   return (
-    <section className="h-screen flex items-center py-20 px-8">
+    <SectionWrapper
+      bgColor={bgColor}
+      className="h-screen flex items-center py-20 px-8"
+    >
       <div className="max-w-2xl mx-auto">
         <p className="text-lg md:text-xl leading-relaxed whitespace-pre-line">
           {content}
         </p>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }
 
-export function ImageSection({ src, caption }) {
+export function GallerySection({
+  images = [],
+  bgColor = SECTION_DEFAULTS.gallery,
+}) {
+  const count = images.length;
+
+  const gridClass =
+    {
+      1: "grid-cols-1 max-w-2xl",
+      2: "grid-cols-2 max-w-4xl gap-4",
+      3: "grid-cols-3 max-w-5xl gap-4",
+      4: "grid-cols-2 max-w-4xl gap-4",
+    }[count] || "grid-cols-1 max-w-2xl";
+
   return (
-    <section className="h-screen relative">
-      <img
-        src={src}
-        alt={caption || "Story image"}
-        className="w-full h-full object-cover"
-      />
-      {caption && (
-        <div className="absolute inset-0 bg-black/40 flex items-end justify-center pb-20">
-          <p className="text-white text-xl md:text-2xl font-light px-8 text-center">
-            {caption}
-          </p>
-        </div>
+    <SectionWrapper
+      bgColor={bgColor}
+      className="h-screen flex flex-col items-center justify-center px-8 py-12"
+    >
+      <div className={`grid ${gridClass} mx-auto`}>
+        {images.map((img, idx) => (
+          <div key={idx} className="relative">
+            <img
+              src={img.src}
+              alt={img.caption || `Image ${idx + 1}`}
+              className="w-full h-auto object-contain rounded"
+            />
+          </div>
+        ))}
+      </div>
+      {images[0]?.caption && (
+        <p className="mt-6 text-lg italic opacity-80 text-center max-w-2xl">
+          {images[0].caption}
+        </p>
       )}
-    </section>
+    </SectionWrapper>
   );
 }
