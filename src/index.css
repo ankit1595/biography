@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
-/* Custom base styles */
 @layer base {
   html {
-    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
   }
 
   body {
-    @apply bg-stone-50 text-stone-900 leading-relaxed;
+    @apply leading-relaxed;
+    font-family: "Georgia", "Times New Roman", serif;
   }
+}
+
+section {
+  @apply snap-start snap-always;
 }
