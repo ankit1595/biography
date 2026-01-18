@@ -4,12 +4,16 @@ import {
   GallerySection,
 } from "./components/Sections";
 import { IndexSection } from "./components/IndexSection";
+import { ScrubScroller } from "./components/ScrubScroller";
 import { ZoomToggleButton, GoToTopButton } from "./components/FloatingButtons";
 import { chapters } from "./data/chapters";
 import { useZoomNavigation } from "./hooks/useZoomNavigation";
+import { useScrollProgress } from "./hooks/useScrollProgress";
 
 function App() {
   const { navigateTo, toggleZoom } = useZoomNavigation();
+
+  const scrollProgress = useScrollProgress();
 
   const renderSection = (section, idx) => {
     switch (section.type) {
@@ -54,6 +58,8 @@ function App() {
 
   return (
     <div className="app">
+      <ScrubScroller progress={scrollProgress} />
+
       <ZoomToggleButton onClick={toggleZoom} />
       <GoToTopButton onClick={() => navigateTo("index")} />
 
