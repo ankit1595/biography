@@ -1,12 +1,17 @@
 import { chapters, BACKGROUNDS } from "../data/chapters";
 import { SectionWrapper } from "./Sections";
 
-export function IndexSection({ bgColor = BACKGROUNDS.dustyRose }) {
+export function IndexSection({ bgColor = BACKGROUNDS.dustyRose, onNavigate }) {
   const handleNavigate = (e, sectionId) => {
     e.preventDefault();
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (onNavigate) {
+      onNavigate(sectionId);
+    } else {
+      // Fallback to simple scroll
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -15,7 +20,7 @@ export function IndexSection({ bgColor = BACKGROUNDS.dustyRose }) {
       ch.id !== "mission" &&
       ch.id !== "index" &&
       ch.id !== "ending" &&
-      ch.id !== "the-mission"
+      ch.id !== "the-mission",
   );
 
   return (

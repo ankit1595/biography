@@ -14,6 +14,7 @@ export const chapters = [
     name: "Mission",
     sections: [
       {
+        id: "mission-intro",
         type: "text",
         bgColor: BACKGROUNDS.charcoal,
         content:
@@ -26,7 +27,9 @@ export const chapters = [
   {
     id: "index",
     name: "Index",
-    sections: [{ type: "index", bgColor: BACKGROUNDS.dustyRose }],
+    sections: [
+      { id: "index-main", type: "index", bgColor: BACKGROUNDS.dustyRose },
+    ],
   },
 
   // The Mission - Uncompromising Non-Duality
@@ -35,12 +38,14 @@ export const chapters = [
     name: "The Mission",
     sections: [
       {
+        id: "the-mission-header",
         type: "header",
         bgColor: BACKGROUNDS.charcoal,
         title: "The Mission",
         subtitle: "Uncompromising Non-Duality",
       },
       {
+        id: "the-mission-content",
         type: "text",
         bgColor: BACKGROUNDS.lightGray,
         isLongForm: true,
@@ -79,6 +84,7 @@ This fusion of philosophical depth, fearlessness, and authenticity - realised on
     name: "The Dawn",
     sections: [
       {
+        id: "the-dawn-header",
         type: "header",
         bgColor: BACKGROUNDS.dustyRose,
         title: "The Dawn (1978-1995)",
@@ -86,6 +92,7 @@ This fusion of philosophical depth, fearlessness, and authenticity - realised on
           "It began with a child's unease that something, somewhere, was terribly wrong.",
       },
       {
+        id: "the-dawn-content",
         type: "text",
         bgColor: BACKGROUNDS.lightGray,
         isLongForm: false,
@@ -104,12 +111,14 @@ The education system felt inadequate. Not because it was difficult, but because 
     name: "Prestige and Protest",
     sections: [
       {
+        id: "prestige-and-protest-header",
         type: "header",
         bgColor: BACKGROUNDS.dustyRose,
         title: "Prestige and Protest (1995-2006)",
         subtitle: "The corporate world offered success, but demanded the soul.",
       },
       {
+        id: "prestige-and-protest-content",
         type: "text",
         bgColor: BACKGROUNDS.lightGray,
         isLongForm: false,
@@ -120,6 +129,7 @@ But the old questions persisted. What is the point of achieving if the achieveme
 The years in the corporate world were not wasted. They revealed the machinery of modern life—the compromises, the distractions, the slow erosion of authentic living.`,
       },
       {
+        id: "prestige-and-protest-gallery",
         type: "gallery",
         bgColor: BACKGROUNDS.black,
         images: [
@@ -142,22 +152,25 @@ The years in the corporate world were not wasted. They revealed the machinery of
     name: "The Free Man",
     sections: [
       {
+        id: "the-free-man-header",
         type: "header",
         bgColor: BACKGROUNDS.dustyRose,
         title: "The Free Man in March",
         subtitle: "Breaking free from the golden cage.",
       },
+      // {
+      //   id: "the-free-man-gallery",
+      //   type: "gallery",
+      //   bgColor: BACKGROUNDS.black,
+      //   images: [
+      //     {
+      //       src: "https://picsum.photos/600/800?random=4",
+      //       caption: "The decision that changed everything",
+      //     },
+      //   ],
+      // },
       {
-        type: "gallery",
-        bgColor: BACKGROUNDS.black,
-        images: [
-          {
-            src: "https://picsum.photos/600/800?random=4",
-            caption: "The decision that changed everything",
-          },
-        ],
-      },
-      {
+        id: "the-free-man-content",
         type: "text",
         bgColor: BACKGROUNDS.lightGray,
         content:
@@ -172,12 +185,14 @@ The years in the corporate world were not wasted. They revealed the machinery of
     name: "Lighting Lamps",
     sections: [
       {
+        id: "lighting-lamps-header",
         type: "header",
         bgColor: BACKGROUNDS.dustyRose,
         title: "Lighting Lamps in the Wilderness",
         subtitle: "When teaching becomes a calling, not a profession.",
       },
       {
+        id: "lighting-lamps-content",
         type: "text",
         bgColor: BACKGROUNDS.lightGray,
         isLongForm: false,
@@ -188,6 +203,7 @@ Teaching began as a quiet affair. A few students, genuine questions, honest conv
 Word spread. Not through advertisements, but through transformation. Those who found clarity became messengers themselves.`,
       },
       {
+        id: "lighting-lamps-gallery",
         type: "gallery",
         bgColor: BACKGROUNDS.black,
         images: [
@@ -206,6 +222,7 @@ Word spread. Not through advertisements, but through transformation. Those who f
     name: "The End",
     sections: [
       {
+        id: "ending-content",
         type: "text",
         bgColor: BACKGROUNDS.charcoal,
         content: "यात्रा जारी है।\n\nThe journey continues.",
