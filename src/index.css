@@ -24,6 +24,7 @@ section {
   width: 150px;
   z-index: 100;
   opacity: 0;
+  border-radius: 1px;
   transition: opacity 0.3s ease-out;
 }
 
@@ -40,6 +41,7 @@ section {
   width: 5px;
   outline: 1px solid #bdb8b9;
   background: #ebe6e7;
+  border-radius: 1px;
   opacity: 0.7;
   transition: width 0.3s ease-out;
 }
@@ -56,6 +58,7 @@ section {
   top: 0;
   width: 5px;
   background: #8c6361;
+  border-radius: 1px;
   transition:
     height 0.1s ease-out,
     width 0.3s ease-out;
