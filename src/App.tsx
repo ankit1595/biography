@@ -2,6 +2,8 @@ import {
   ChapterHeader,
   TextSection,
   GallerySection,
+  SubSection,
+  QuoteSection,
 } from "./components/Sections";
 import { IndexSection } from "./components/IndexSection";
 import { ScrubScroller } from "./components/ScrubScroller";
@@ -53,6 +55,25 @@ function App() {
           <GallerySection
             key={idx}
             images={section.images}
+            bgColor={section.bgColor}
+          />
+        );
+      case "subsection":
+        return (
+          <SubSection
+            key={idx}
+            title={section.title}
+            content={section.content}
+            bgColor={section.bgColor}
+          />
+        );
+      case "quote":
+        return (
+          <QuoteSection
+            key={idx}
+            quote={section.quote}
+            translation={section.translation}
+            attribution={section.attribution}
             bgColor={section.bgColor}
           />
         );

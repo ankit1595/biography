@@ -107,6 +107,7 @@ export function GallerySection({
             <img
               src={img.src}
               alt={img.caption || `Image ${idx + 1}`}
+              loading="lazy"
               className="w-full h-auto object-contain rounded"
             />
           </div>
@@ -117,6 +118,56 @@ export function GallerySection({
           {images[0].caption}
         </p>
       )}
+    </SectionWrapper>
+  );
+}
+
+export function SubSection({
+  title,
+  content,
+  bgColor = SECTION_DEFAULTS.text,
+}) {
+  return (
+    <SectionWrapper bgColor={bgColor} className="py-16 px-8">
+      <div className="content-container">
+        <h3 className="text-xl md:text-2xl font-semibold mb-6 leading-tight">
+          {title}
+        </h3>
+        <p className="text-lg md:text-xl leading-relaxed whitespace-pre-line">
+          {content}
+        </p>
+      </div>
+    </SectionWrapper>
+  );
+}
+
+
+export function QuoteSection({
+  quote,
+  translation,
+  attribution,
+  bgColor = SECTION_DEFAULTS.header,
+}) {
+  return (
+    <SectionWrapper
+      bgColor={bgColor}
+      className="h-screen flex items-center justify-center px-8"
+    >
+      <div className="content-container text-center max-w-3xl mx-auto">
+        <blockquote className="text-xl md:text-2xl italic leading-relaxed whitespace-pre-line mb-6">
+          "{quote}"
+        </blockquote>
+        {translation && (
+          <p className="text-base md:text-lg opacity-70 italic mb-4 whitespace-pre-line">
+            {translation}
+          </p>
+        )}
+        {attribution && (
+          <cite className="text-base md:text-lg opacity-60 block">
+            — {attribution}
+          </cite>
+        )}
+      </div>
     </SectionWrapper>
   );
 }

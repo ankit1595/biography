@@ -16,10 +16,12 @@ export const chapters = [
     sections: [
       {
         id: "mission-intro",
-        type: "text",
+        type: "quote",
         bgColor: BACKGROUNDS.charcoal,
-        content:
-          "एक कहानी शुरू होती है\nसूरज के ढलने के बाद,\nअंधेरा कितना घोर घना है\nजाना दीया बनने के बाद।",
+        quote:
+          "एक कहानी शुरु होती है\nसूरज के ढलने के बाद,\nअंधेरा कितना घोर घना है\nजाना दीया बनने के बाद,\nआधी रात क्यों लौ जली थी\nजानोगे तुम भी जलने के बाद।",
+        translation:
+          "A story begins after the sun has set\nhow dark the night is - \nyou'll know when you're lit.\nWhy the flame burns on at midnight,\nyou'll know when you too burn bright.",
       },
     ],
   },
@@ -105,6 +107,15 @@ This fusion of philosophical depth, fearlessness, and authenticity - realised on
 Born in a middle-class family in Uttar Pradesh, the surroundings were ordinary, but the inner landscape was anything but. Books became companions, philosophy became the language of understanding.
 
 The education system felt inadequate. Not because it was difficult, but because it seemed to miss the point entirely. What was the purpose of learning if it didn't address the fundamental questions of life?`,
+      },
+      {
+        id: "the-dawn-responsibility",
+        type: "subsection",
+        bgColor: BACKGROUNDS.lightGray,
+        title: "A strong sense of responsibility at a very early age",
+        content: `Living in Kanpur, when he was barely two-and-a-half years old, frequent power cuts were common. One summer evening, while his parents were on the rooftop, the electricity went out, and the fan in his room stopped. The little boy woke up, got off his bed, and set out - still in his shorts - to fetch an electrician from the market.
+
+On the way, he met the neighborhood milkman, who asked where he was going. Calmly, he replied, "The electricity is out, I'm going to get the electrician." Panic had already broken out at home, but by the time his family reached him, he had already asked the electrician to come.`,
       },
     ],
   },
