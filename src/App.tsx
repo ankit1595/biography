@@ -5,17 +5,22 @@ import {
 } from "./components/Sections";
 import { IndexSection } from "./components/IndexSection";
 import { ScrubScroller } from "./components/ScrubScroller";
-import { ZoomToggleButton, GoToTopButton } from "./components/FloatingButtons";
+import { MobileNav } from "./components/MobileNav";
 import { chapters } from "./data/chapters";
-import { useZoomNavigation } from "./hooks/useZoomNavigation";
-import { useScrollProgress } from "./hooks/useScrollProgress";
+import { useScroll } from "./hooks/useScroll";
 
 function App() {
-  const { navigateTo, toggleZoom } = useZoomNavigation();
+  const { state, actions } = useScroll();
+  const { progress, positions, currentChapter, isZoomedOut } = state;
+  const {
+    navigateTo,
+    scrollToPercent,
+    toggleZoom,
+    startScrubbing,
+    endScrubbing,
+  } = actions;
 
-  const scrollProgress = useScrollProgress();
-
-  const renderSection = (section, idx) => {
+  const renderSection = (section: any, idx: number) => {
     switch (section.type) {
       case "index":
         return (
@@ -58,10 +63,24 @@ function App() {
 
   return (
     <div className="app">
-      <ScrubScroller progress={scrollProgress} />
+      {/* Mobile navigation bar - only visible on mobile */}
+      <MobileNav
+        currentChapter={currentChapter}
+        isZoomedOut={isZoomedOut}
+        onToggleZoom={toggleZoom}
+      />
 
-      <ZoomToggleButton onClick={toggleZoom} />
-      <GoToTopButton onClick={() => navigateTo("index")} />
+      {/* ScrubScroller receives all state and actions from context */}
+      <ScrubScroller
+        progress={progress}
+        positions={positions}
+        currentChapter={currentChapter}
+        onScrollToPercent={scrollToPercent}
+        onZoomOut={toggleZoom}
+        onStartScrubbing={startScrubbing}
+        onEndScrubbing={endScrubbing}
+        isZoomedOut={isZoomedOut}
+      />
 
       <main className="biography-content">
         {chapters.map((chapter) =>

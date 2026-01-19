@@ -1,0 +1,29 @@
+export const ANIMATION_TIMING = {
+  ZOOM_TRANSITION_DURATION: 400,
+  ZOOM_OUT_DELAY: 450,
+  ZOOM_IN_DELAY: 300,
+  ZOOM_IN_SETTLE: 500,
+  SCROLL_MIN_DURATION: 600,
+  SCROLL_MAX_DURATION: 1500,
+  POST_ANIMATION_DELAY: 400,
+  DOM_SETTLE_DELAY: 100,
+} as const;
+
+export const ZOOM_CONFIG = {
+  SCALE: 0.3,
+  BG_COLOR: "#eceff1",
+} as const;
+
+export const SCROLLBAR_CONFIG = {
+  GAP_HEIGHT: 0.3,
+  PROGRESS_THRESHOLD: 0.1,
+} as const;
+
+export const NAVIGATION_CONFIG = {
+  SKIP_THRESHOLD: 50,
+} as const;
+
+export const MOBILE_CONFIG = {
+  BREAKPOINT: 768,
+  NAV_HEIGHT: 56,
+} as const;

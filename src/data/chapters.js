@@ -12,6 +12,7 @@ export const chapters = [
   {
     id: "mission",
     name: "Mission",
+    shortName: "Mission",
     sections: [
       {
         id: "mission-intro",
@@ -27,6 +28,7 @@ export const chapters = [
   {
     id: "index",
     name: "Index",
+    shortName: "Index",
     sections: [
       { id: "index-main", type: "index", bgColor: BACKGROUNDS.dustyRose },
     ],
@@ -36,6 +38,7 @@ export const chapters = [
   {
     id: "the-mission",
     name: "The Mission",
+    shortName: "The Mission",
     sections: [
       {
         id: "the-mission-header",
@@ -82,6 +85,7 @@ This fusion of philosophical depth, fearlessness, and authenticity - realised on
   {
     id: "the-dawn",
     name: "The Dawn",
+    shortName: "Dawn",
     sections: [
       {
         id: "the-dawn-header",
@@ -109,6 +113,7 @@ The education system felt inadequate. Not because it was difficult, but because 
   {
     id: "prestige-and-protest",
     name: "Prestige and Protest",
+    shortName: "Prestige",
     sections: [
       {
         id: "prestige-and-protest-header",
@@ -150,6 +155,7 @@ The years in the corporate world were not wasted. They revealed the machinery of
   {
     id: "the-free-man",
     name: "The Free Man",
+    shortName: "Free Man",
     sections: [
       {
         id: "the-free-man-header",
@@ -183,6 +189,7 @@ The years in the corporate world were not wasted. They revealed the machinery of
   {
     id: "lighting-lamps",
     name: "Lighting Lamps",
+    shortName: "Lamps",
     sections: [
       {
         id: "lighting-lamps-header",
@@ -220,6 +227,7 @@ Word spread. Not through advertisements, but through transformation. Those who f
   {
     id: "ending",
     name: "The End",
+    shortName: "End",
     sections: [
       {
         id: "ending-content",

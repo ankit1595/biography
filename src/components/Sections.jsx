@@ -38,7 +38,7 @@ export function ChapterHeader({
       bgColor={bgColor}
       className="h-screen flex items-center justify-center px-8"
     >
-      <div className="max-w-3xl text-center">
+      <div className="content-container text-center">
         <h1 className="text-3xl md:text-4xl font-bold mb-6">{title}</h1>
         {subtitle && (
           <p className="text-lg md:text-xl italic opacity-80">{subtitle}</p>
@@ -57,7 +57,7 @@ export function TextSection({
     return (
       <>
         <SectionWrapper bgColor={bgColor} className="py-20 px-8">
-          <div className="max-w-2xl mx-auto">
+          <div className="content-container">
             <p className="text-lg md:text-xl leading-relaxed whitespace-pre-line">
               {content}
             </p>
@@ -73,7 +73,7 @@ export function TextSection({
       bgColor={bgColor}
       className="h-screen flex items-center py-20 px-8"
     >
-      <div className="max-w-2xl mx-auto">
+      <div className="content-container">
         <p className="text-lg md:text-xl leading-relaxed whitespace-pre-line">
           {content}
         </p>
