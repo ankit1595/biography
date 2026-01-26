@@ -157,6 +157,8 @@ export function ScrubScroller({
     <div
       className={`scrub-sidebar ${isZoomedOut ? "is-zoomed-out" : ""}`}
       onClick={handleSidebarClick}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
     >
       {currentChapter && (
         <button className="scrub-chapter-name" onClick={handleChapterNameClick}>
@@ -167,8 +169,7 @@ export function ScrubScroller({
       <div
         ref={trackRef}
         className={`scrub-scroller ${isDragging ? "is-dragging" : ""} ${isHovering ? "is-hovering" : ""} ${isZoomedOut ? "is-zoomed-out" : ""}`}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
+        
         onMouseDown={handleDragStart}
         onTouchStart={handleDragStart}
         onClick={handleTrackClick}
