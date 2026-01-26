@@ -26,6 +26,30 @@ interface ScrollProviderProps {
   children: ReactNode;
 }
 
+const getViewportCenterPadding = () => window.innerHeight / 2;
+
+function normalScrollToZoomedScroll(normalScrollY: number): number {
+  const viewportHeight = window.innerHeight;
+  const centerPadding = getViewportCenterPadding();
+  
+  const contentAtViewportCenter = normalScrollY + viewportHeight / 2;
+  const scaledContentPosition = contentAtViewportCenter * ZOOM_CONFIG.SCALE;
+  const zoomedScrollY = scaledContentPosition - viewportHeight / 2 + centerPadding;
+  
+  return Math.max(0, zoomedScrollY);
+}
+
+function zoomedScrollToNormalScroll(zoomedScrollY: number): number {
+  const viewportHeight = window.innerHeight;
+  const centerPadding = getViewportCenterPadding();
+  
+  const scaledContentPosition = zoomedScrollY + viewportHeight / 2 - centerPadding;
+  const contentAtViewportCenter = scaledContentPosition / ZOOM_CONFIG.SCALE;
+  const normalScrollY = contentAtViewportCenter - viewportHeight / 2;
+  
+  return Math.max(0, normalScrollY);
+}
+
 export function ScrollProvider({ children }: ScrollProviderProps) {
   const [isZoomedOut, setIsZoomedOut] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -72,14 +96,14 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
 
   const applyZoomOut = useCallback((storyContent: HTMLElement) => {
     storyContentRef.current = storyContent;
-    const contentHeight = storyContent.scrollHeight;
+    
     const viewportHeight = window.innerHeight;
-    const extraSpace = viewportHeight * (1 - ZOOM_CONFIG.SCALE);
-    const height = contentHeight * ZOOM_CONFIG.SCALE + extraSpace;
-    const currentScrollY = window.scrollY;
+    const centerPadding = getViewportCenterPadding();
+    const scaledContentHeight = storyContent.scrollHeight * ZOOM_CONFIG.SCALE;
+    const totalBodyHeight = centerPadding + scaledContentHeight + centerPadding;
 
     isZoomedOutRef.current = true;
-    setZoomedBodyHeight(height);
+    setZoomedBodyHeight(totalBodyHeight);
     setIsZoomedOut(true);
 
     document.documentElement.style.scrollSnapType = "none";
@@ -87,16 +111,16 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
     document.documentElement.style.overflowY = "auto";
     storyContent.style.transform = `scale(${ZOOM_CONFIG.SCALE})`;
     storyContent.style.transformOrigin = "center top";
-    document.body.style.height = `${height}px`;
+    storyContent.style.marginTop = `${centerPadding}px`;
+    document.body.style.height = `${totalBodyHeight}px`;
     document.body.style.overflow = "hidden";
 
-    const zoomedScrollY = currentScrollY * ZOOM_CONFIG.SCALE;
+    const zoomedScrollY = normalScrollToZoomedScroll(window.scrollY);
     window.scrollTo({ top: zoomedScrollY, behavior: "instant" });
   }, []);
 
   const removeZoomOut = useCallback((storyContent: HTMLElement) => {
-    const currentZoomedScrollY = window.scrollY;
-    const originalScrollY = currentZoomedScrollY / ZOOM_CONFIG.SCALE;
+    const normalScrollY = zoomedScrollToNormalScroll(window.scrollY);
 
     isZoomedOutRef.current = false;
     setZoomedBodyHeight(null);
@@ -105,13 +129,14 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
     storyContent.style.transition = "none";
     storyContent.style.transform = "none";
     storyContent.style.transformOrigin = "";
+    storyContent.style.marginTop = "";
     document.body.style.height = "";
     document.body.style.overflow = "";
     document.documentElement.style.backgroundColor = "";
     document.documentElement.style.overflowY = "";
     document.documentElement.style.scrollSnapType = "";
 
-    window.scrollTo({ top: originalScrollY, behavior: "instant" });
+    window.scrollTo({ top: normalScrollY, behavior: "instant" });
 
     requestAnimationFrame(() => {
       storyContent.style.transition = "";
@@ -127,7 +152,7 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
       removeZoomOut(storyContent);
 
       requestAnimationFrame(() => {
-        targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
         scheduleTimeout(() => setIsAnimating(false), ANIMATION_TIMING.ZOOM_IN_SETTLE);
       });
     },
@@ -169,21 +194,19 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
     (sectionId: string) => {
       if (isAnimating) return;
 
-      const element = document.getElementById(sectionId);
+      const targetElement = document.getElementById(sectionId);
       const storyContent = getStoryContent();
-      if (!element || !storyContent) return;
+      if (!targetElement || !storyContent) return;
 
-      const currentY = window.scrollY;
-      const targetY = element.getBoundingClientRect().top + currentY;
+      const targetNormalScrollY = targetElement.getBoundingClientRect().top + window.scrollY;
 
       setIsAnimating(true);
       clearAllTimeouts();
       applyZoomOut(storyContent);
 
       scheduleTimeout(() => {
-        const zoomedTargetY = targetY * ZOOM_CONFIG.SCALE;
-        const currentZoomedY = window.scrollY;
-        const scrollDistance = Math.abs(zoomedTargetY - currentZoomedY);
+        const zoomedTargetY = normalScrollToZoomedScroll(targetNormalScrollY);
+        const scrollDistance = Math.abs(zoomedTargetY - window.scrollY);
         const scrollDuration = Math.max(
           ANIMATION_TIMING.SCROLL_MIN_DURATION,
           Math.min(ANIMATION_TIMING.SCROLL_MAX_DURATION, scrollDistance)
@@ -195,7 +218,7 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
           removeZoomOut(storyContent);
 
           requestAnimationFrame(() => {
-            element.scrollIntoView({ behavior: "smooth", block: "start" });
+            targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
             scheduleTimeout(() => setIsAnimating(false), ANIMATION_TIMING.ZOOM_IN_DELAY);
           });
         }, scrollDuration);
@@ -211,26 +234,24 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
       const storyContent = getStoryContent();
       if (!storyContent) return;
 
-      const docHeight = document.documentElement.scrollHeight;
       const viewportHeight = window.innerHeight;
-      const unzoomedScrollableHeight = docHeight - viewportHeight;
-      const targetScrollY = (percent / 100) * unzoomedScrollableHeight;
-      const currentY = window.scrollY;
+      const scrollableHeight = document.documentElement.scrollHeight - viewportHeight;
+      const targetNormalScrollY = (percent / 100) * scrollableHeight;
 
       if (isZoomedOut) {
-        const zoomedTargetY = targetScrollY * ZOOM_CONFIG.SCALE;
+        const zoomedTargetY = normalScrollToZoomedScroll(targetNormalScrollY);
         window.scrollTo({ top: zoomedTargetY, behavior: "smooth" });
         return;
       }
 
-      if (Math.abs(targetScrollY - currentY) < NAVIGATION_CONFIG.SKIP_THRESHOLD) return;
+      if (Math.abs(targetNormalScrollY - window.scrollY) < NAVIGATION_CONFIG.SKIP_THRESHOLD) return;
 
       setIsAnimating(true);
       clearAllTimeouts();
       applyZoomOut(storyContent);
 
       scheduleTimeout(() => {
-        const zoomedTargetY = targetScrollY * ZOOM_CONFIG.SCALE;
+        const zoomedTargetY = normalScrollToZoomedScroll(targetNormalScrollY);
         const scrollDistance = Math.abs(zoomedTargetY - window.scrollY);
         const scrollDuration = Math.max(
           ANIMATION_TIMING.SCROLL_MIN_DURATION,
@@ -251,18 +272,19 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
   const scrollToPercent = useCallback(
     (percent: number, options: ScrollOptions = {}) => {
       const viewportHeight = window.innerHeight;
-      const currentlyZoomedOut = isZoomedOutRef.current;
+      const scrollBehavior = options.instant ? "instant" : "smooth";
 
-      if (currentlyZoomedOut) {
-        const docHeight = storyContentRef.current?.scrollHeight ?? document.documentElement.scrollHeight;
-        const originalScrollableHeight = docHeight - viewportHeight;
-        const targetOriginalY = (percent / 100) * originalScrollableHeight;
-        const zoomedTargetY = targetOriginalY * ZOOM_CONFIG.SCALE;
-        window.scrollTo({ top: zoomedTargetY, behavior: options.instant ? "instant" : "smooth" });
+      if (isZoomedOutRef.current) {
+        const contentHeight = storyContentRef.current?.scrollHeight ?? document.documentElement.scrollHeight;
+        const scrollableHeight = contentHeight - viewportHeight;
+        const targetNormalScrollY = (percent / 100) * scrollableHeight;
+        const zoomedTargetY = normalScrollToZoomedScroll(targetNormalScrollY);
+        
+        window.scrollTo({ top: zoomedTargetY, behavior: scrollBehavior });
       } else {
-        const currentScrollableHeight = document.documentElement.scrollHeight - viewportHeight;
-        const targetY = (percent / 100) * Math.max(0, currentScrollableHeight);
-        window.scrollTo({ top: targetY, behavior: options.instant ? "instant" : "smooth" });
+        const scrollableHeight = document.documentElement.scrollHeight - viewportHeight;
+        const targetY = (percent / 100) * Math.max(0, scrollableHeight);
+        window.scrollTo({ top: targetY, behavior: scrollBehavior });
       }
     },
     []
@@ -299,18 +321,17 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
   }, [getStoryContent, removeZoomOut]);
 
   const updateProgress = useCallback(() => {
-    const scrollTop = window.scrollY;
     const viewportHeight = window.innerHeight;
     let percent: number;
 
     if (isZoomedOut && zoomedBodyHeight !== null) {
-      const originalScrollY = scrollTop / ZOOM_CONFIG.SCALE;
-      const originalDocHeight = storyContentRef.current?.scrollHeight ?? (zoomedBodyHeight / ZOOM_CONFIG.SCALE);
-      const originalScrollableHeight = originalDocHeight - viewportHeight;
-      percent = originalScrollableHeight > 0 ? (originalScrollY / originalScrollableHeight) * 100 : 0;
+      const normalScrollY = zoomedScrollToNormalScroll(window.scrollY);
+      const contentHeight = storyContentRef.current?.scrollHeight ?? 0;
+      const scrollableHeight = contentHeight - viewportHeight;
+      percent = scrollableHeight > 0 ? (normalScrollY / scrollableHeight) * 100 : 0;
     } else {
-      const currentScrollableHeight = document.documentElement.scrollHeight - viewportHeight;
-      percent = currentScrollableHeight > 0 ? (scrollTop / currentScrollableHeight) * 100 : 0;
+      const scrollableHeight = document.documentElement.scrollHeight - viewportHeight;
+      percent = scrollableHeight > 0 ? (window.scrollY / scrollableHeight) * 100 : 0;
     }
 
     percent = Math.max(0, Math.min(100, percent));
@@ -367,15 +388,14 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
   }, []);
 
   const detectCurrentChapter = useCallback(() => {
-    let scrollTop = window.scrollY;
-
-    if (isZoomedOut) {
-      scrollTop = scrollTop / ZOOM_CONFIG.SCALE;
-    }
+    const viewportHeight = window.innerHeight;
+    const normalScrollY = isZoomedOut 
+      ? zoomedScrollToNormalScroll(window.scrollY) 
+      : window.scrollY;
 
     const isMobile = window.innerWidth <= MOBILE_CONFIG.BREAKPOINT;
-    const navOffset = isMobile ? MOBILE_CONFIG.NAV_HEIGHT / 2 : 0;
-    const viewportMiddle = scrollTop + window.innerHeight / 2 + navOffset;
+    const mobileNavOffset = isMobile ? MOBILE_CONFIG.NAV_HEIGHT / 2 : 0;
+    const viewportMiddle = normalScrollY + viewportHeight / 2 + mobileNavOffset;
 
     for (let i = positions.length - 1; i >= 0; i--) {
       if (positions[i].top <= viewportMiddle) {
